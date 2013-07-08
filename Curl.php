@@ -56,6 +56,17 @@ class Curl extends CComponent {
         return $this->_exec($this->buildUrl($url, $params));
     }
 
+    public function delete($url, $data = array()) {
+        if(count($data)) {
+            $url .= strpos($url, '?')===false?'?':'&';
+            $url .= http_build_query($data);
+        }
+        $this->setOption(CURLOPT_RETURNTRANSFER, true);
+        $this->setOption(CURLOPT_CUSTOMREQUEST, 'DELETE');
+        $this->setOption(CURLOPT_POSTFIELDS, $data);
+        return $this->_exec($url);
+    }
+
     public function buildUrl($url, $data = array()) {
         $parsed = parse_url($url);
         isset($parsed['query']) ? parse_str($parsed['query'], $parsed['query']) : $parsed['query'] = array();
